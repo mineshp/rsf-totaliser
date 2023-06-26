@@ -1,12 +1,9 @@
 import Stripe from "stripe";
 import type { ChargesResponse, HourlyData } from "~/types/donation";
-const stripe = new Stripe(
-  "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",
-  {
-    apiVersion: "2022-11-15",
-    maxNetworkRetries: 2,
-  }
-);
+const stripe = new Stripe(process.env.STRIPE_API_KEY || "xyz", {
+  apiVersion: "2022-11-15",
+  maxNetworkRetries: 2,
+});
 
 export async function getAllPayments(): Promise<ChargesResponse> {
   const limit = 100; // Adjust the limit as needed
