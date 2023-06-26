@@ -151,6 +151,7 @@ jobs:
           CI: true
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          STRIPE_API_KEY: ${{ secrets.STRIPE_API_KEY }}
 
       - name: 🚀 Production Deploy
         if: github.ref == 'refs/heads/main'
@@ -159,3 +160,4 @@ jobs:
           CI: true
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          STRIPE_API_KEY: ${{ secrets.STRIPE_API_KEY }}
