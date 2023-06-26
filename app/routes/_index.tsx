@@ -8,12 +8,16 @@ import type { LoaderFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { useOptionalUser } from "~/utils";
+import { getUserId } from "~/session.server";
 
 type LoaderData = {
   donations: Awaited<ReturnType<any>>;
 };
 
 export const loader: LoaderFunction = async ({ params, request }) => {
+  const userId = await getUserId(request);
+  if (!userId) return redirect("/login");
+
   const donations = await getAllPayments();
 
   return json({ donations });
