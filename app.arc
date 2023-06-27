@@ -5,6 +5,8 @@ rsf-totaliser-5770
 timeout 60
 region eu-west-1
 runtime nodejs
+policies
+  architect-default-policies
 
 @http
 /*
@@ -19,7 +21,3 @@ user
 
 password
   pk *String # userId
-
-note
-  pk *String  # userId
-  sk **String # noteId
