@@ -155,7 +155,7 @@ jobs:
           STRIPE_API_KEY: ${{ secrets.STRIPE_API_KEY }}
 
       - name: 🚀 Production Deploy
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/master'
         run: arc deploy --production --prune
         env:
           CI: true
