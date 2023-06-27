@@ -10,22 +10,22 @@ export async function getAllPayments(): Promise<ChargesResponse> {
   let allPayments: any[] = [];
   let startingAfter: string | null = null;
   let today = new Date();
-  const yesterday = new Date(today);
+  // const yesterday = new Date(today);
 
-  yesterday.setDate(yesterday.getDate() - 1);
+  // yesterday.setDate(yesterday.getDate() - 1);
 
-  yesterday.setHours(5);
-  yesterday.setSeconds(0);
-  yesterday.setMinutes(0);
+  // yesterday.setHours(5);
+  // yesterday.setSeconds(0);
+  // yesterday.setMinutes(0);
 
-  today.setHours(8);
+  today.setHours(5);
   today.setMinutes(0);
   today.setSeconds(0);
-  const startTimestamp = Math.floor(yesterday.getTime() / 1000);
+  const startTimestamp = Math.floor(today.getTime() / 1000);
   const endOfDay = new Date(
-    yesterday.getFullYear(),
-    yesterday.getMonth(),
-    yesterday.getDate(),
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate(),
     23,
     59,
     59
