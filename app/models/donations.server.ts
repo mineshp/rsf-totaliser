@@ -55,7 +55,16 @@ export async function getAllPayments(): Promise<ChargesResponse> {
     };
   }
 
-  return calculateRunningTotal(allPayments);
+  const filteredPayments = allPayments.filter((payment) => {
+    // Exclude GivePenny
+    if (payment.hasOwnProperty("description")) {
+      // Check if the 'description' value contains the words 'GiveMe' (case insensitive)
+      return !/GivePenny/i.test(payment.description);
+    }
+    return true;
+  });
+
+  return calculateRunningTotal(filteredPayments);
 }
 
 const calculateRunningTotal = (payments: any): ChargesResponse => {
