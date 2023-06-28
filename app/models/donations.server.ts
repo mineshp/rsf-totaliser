@@ -8,7 +8,7 @@ const stripe = new Stripe(process.env.STRIPE_API_KEY || "xyz", {
 function getStartAndEndTimestamp(period: string | null) {
   let today = new Date();
 
-  today.setHours(5);
+  today.setHours(8);
   today.setMinutes(0);
   today.setSeconds(0);
 
@@ -133,7 +133,12 @@ const calculateRunningTotal = (payments: any): ChargesResponse => {
 
     // Calculate the hourly totals and group totals
     const createdDate = new Date(created * 1000);
-    const hour = String(createdDate.getHours()).padStart(2, "0");
+
+    const hour = createdDate.toLocaleString("en-GB", {
+      timeZone: "Europe/London",
+      hour: "2-digit",
+      hour12: false,
+    });
 
     if (!hourly[hour as string]) {
       hourly[hour] = {
