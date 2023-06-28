@@ -5,32 +5,63 @@ const stripe = new Stripe(process.env.STRIPE_API_KEY || "xyz", {
   maxNetworkRetries: 2,
 });
 
-export async function getAllPayments(): Promise<ChargesResponse> {
-  const limit = 100; // Adjust the limit as needed
-  let allPayments: any[] = [];
-  let startingAfter: string | null = null;
+function getStartAndEndTimestamp(period: string | null) {
   let today = new Date();
-  // const yesterday = new Date(today);
-
-  // yesterday.setDate(yesterday.getDate() - 1);
-
-  // yesterday.setHours(5);
-  // yesterday.setSeconds(0);
-  // yesterday.setMinutes(0);
 
   today.setHours(5);
   today.setMinutes(0);
   today.setSeconds(0);
-  const startTimestamp = Math.floor(today.getTime() / 1000);
-  const endOfDay = new Date(
-    today.getFullYear(),
-    today.getMonth(),
-    today.getDate(),
-    23,
-    59,
-    59
-  );
-  const endTimestamp = Math.floor(endOfDay.getTime() / 1000);
+
+  let startTimestamp;
+  let endTimestamp;
+
+  if (period && period === "yesterday") {
+    const yesterday = new Date(today);
+
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    yesterday.setHours(5);
+    yesterday.setSeconds(0);
+    yesterday.setMinutes(0);
+
+    const endOfDay = new Date(
+      yesterday.getFullYear(),
+      yesterday.getMonth(),
+      yesterday.getDate(),
+      23,
+      59,
+      59
+    );
+
+    startTimestamp = Math.floor(yesterday.getTime() / 1000);
+    endTimestamp = Math.floor(endOfDay.getTime() / 1000);
+  } else {
+    const endOfDay = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate(),
+      23,
+      59,
+      59
+    );
+    startTimestamp = Math.floor(today.getTime() / 1000);
+    endTimestamp = Math.floor(endOfDay.getTime() / 1000);
+  }
+
+  return {
+    startTimestamp,
+    endTimestamp,
+  };
+}
+
+export async function getAllPayments(
+  period: string | null
+): Promise<ChargesResponse> {
+  const limit = 100; // Adjust the limit as needed
+  let allPayments: any[] = [];
+  let startingAfter: string | null = null;
+
+  const { startTimestamp, endTimestamp } = getStartAndEndTimestamp(period);
 
   let listParams: any = {
     created: { gte: startTimestamp, lte: endTimestamp },

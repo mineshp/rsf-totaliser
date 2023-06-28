@@ -5,6 +5,7 @@ import { json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { useOptionalUser } from "~/utils";
 import { getUserId } from "~/session.server";
+import { useSearchParams } from "remix";
 
 type LoaderData = {
   donations: Awaited<ReturnType<any>>;
@@ -14,7 +15,10 @@ export const loader: LoaderFunction = async ({ params, request }) => {
   const userId = await getUserId(request);
   if (!userId) return redirect("/login");
 
-  const donations = await getAllPayments();
+  const searchParams = new URLSearchParams(request.url.split("?")[1]);
+  const period = searchParams.get("period");
+
+  const donations = await getAllPayments(period);
 
   return json({ donations });
 };
