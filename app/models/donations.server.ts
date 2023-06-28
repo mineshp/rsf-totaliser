@@ -8,7 +8,7 @@ const stripe = new Stripe(process.env.STRIPE_API_KEY || "xyz", {
 function getStartAndEndTimestamp(period: string | null) {
   let today = new Date();
 
-  today.setHours(8);
+  today.setHours(5);
   today.setMinutes(0);
   today.setSeconds(0);
 
