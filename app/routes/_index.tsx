@@ -47,6 +47,7 @@ export default function Index() {
   }
 
   const hourlyTimes = generateHourlyTimes();
+
   const currentTime = new Date();
   const currentHour = currentTime.getHours();
 

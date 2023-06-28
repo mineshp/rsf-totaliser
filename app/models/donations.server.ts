@@ -126,6 +126,8 @@ const calculateRunningTotal = (payments: any): ChargesResponse => {
       totals.stripeMerch += amount_captured / 100;
     } else if (description.match(/donation/i)) {
       totals.generalDonation += amount_captured / 100;
+    } else if (description.match(/Subscription creation/i)) {
+      totals.generalDonation += amount_captured / 100;
     }
 
     // Calculate the running total
@@ -161,6 +163,8 @@ const calculateRunningTotal = (payments: any): ChargesResponse => {
       description.match(/donation/i) &&
       /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/.test(description)
     ) {
+      hourly[hour].generalDonation += amount_captured / 100;
+    } else if (description.match(/Subscription creation/i)) {
       hourly[hour].generalDonation += amount_captured / 100;
     }
 
