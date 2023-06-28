@@ -78,7 +78,7 @@ export default function Index() {
         </h2>
         <div className="rounded-full pt-2">
           <table className="w-full text-left text-sm text-gray-500 dark:text-gray-400">
-            <thead className="bg-sky-300 text-xs uppercase text-gray-700 dark:bg-sky-300 dark:text-rsfBlue-400">
+            <thead className="bg-sky-300 text-xs uppercase text-rsfBlue-400">
               <tr>
                 <th scope="col" className="px-6 py-3">
                   Stripe Tap to Pay Merch Total
@@ -95,7 +95,7 @@ export default function Index() {
               </tr>
             </thead>
             <tbody>
-              <tr className="border-b bg-white text-white dark:border-blue-600 dark:bg-rsfBlue-400">
+              <tr className="border-b border-blue-600 bg-rsfBlue-400 text-white">
                 <td className="px-6 py-4 text-2xl">
                   £{donations.totals.stripeMerch.toFixed(2)}
                 </td>
@@ -143,7 +143,7 @@ export default function Index() {
                         currentHour === Number(time.substring(0, 2))
                           ? "bg-red-200 text-lg"
                           : "bg-white"
-                      } dark:border-rsfBlue-400`}
+                      } border-rsfBlue-400`}
                       key={time}
                     >
                       <td className="px-6 py-4">{time}</td>
