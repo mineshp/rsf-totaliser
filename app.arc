@@ -2,7 +2,7 @@
 rsf-totaliser-5770
 
 @aws
-timeout 60
+timeout 90
 region eu-west-1
 runtime nodejs
 policies

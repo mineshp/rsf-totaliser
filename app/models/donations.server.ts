@@ -8,7 +8,7 @@ const stripe = new Stripe(process.env.STRIPE_API_KEY || "xyz", {
 function getStartAndEndTimestamp(period: string | null) {
   let today = new Date();
 
-  today.setHours(13);
+  today.setHours(15);
   today.setMinutes(0);
   today.setSeconds(0);
 
@@ -62,9 +62,7 @@ export async function getAllPayments(
   let startingAfter: string | null = null;
 
   const { startTimestamp, endTimestamp } = getStartAndEndTimestamp(period);
-  // return {
-  //   hourly: {},
-  // };
+
   let listParams: any = {
     created: { gte: startTimestamp, lte: endTimestamp },
     limit: limit,
@@ -101,18 +99,23 @@ export async function getAllPayments(
 }
 
 const calculateRunningTotal = (payments: any): ChargesResponse => {
+  // const totals = {
+  //   stripeMerch: 0,
+  //   stripeDonation: 0,
+  //   generalDonation: 0,
+  //   runningTotal: 0,
+  // };
   const hourly: HourlyData = {};
 
-  payments.forEach((payment: any) => {
+  for (let i = 0; i < payments.length; i++) {
     const {
       amount_captured,
       created,
       description,
       metadata: { donationMethod },
-    } = payment;
+    } = payments[i];
 
     const amount = amount_captured / 100;
-
     const createdDate = new Date(created * 1000);
     const hour = createdDate.toLocaleString("en-GB", {
       timeZone: "Europe/London",
@@ -130,38 +133,32 @@ const calculateRunningTotal = (payments: any): ChargesResponse => {
     }
 
     if (donationMethod?.startsWith("Stripe")) {
-      if (description.match(/Merchandise/i)) {
+      if (description.match(/Merchandise|Donations/i)) {
+        // totals.stripeMerch += amount;
         hourly[hour].stripeMerch += amount;
-      } else if (description.match(/Donations/i)) {
-        hourly[hour].stripeDonation += amount;
       }
-    } else if (
-      description.match(/GiveTap/i) ||
-      description.match(/Subscription creation/i)
-    ) {
+    } else if (description.match(/GiveTap|Subscription creation/i)) {
+      // totals.stripeMerch += amount;
       hourly[hour].stripeMerch += amount;
     } else if (
       description.match(/donation/i) &&
       /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/.test(description)
     ) {
+      // totals.generalDonation += amount;
       hourly[hour].generalDonation += amount;
     }
 
+    // totals.runningTotal += amount;
     hourly[hour].runningTotal += amount;
-  });
+  }
 
   return {
+    // totals,
     hourly,
   };
 };
 
 // const calculateRunningTotal = (payments: any): ChargesResponse => {
-//   // const totals = {
-//   //   stripeMerch: 0,
-//   //   stripeDonation: 0,
-//   //   generalDonation: 0,
-//   //   runningTotal: 0,
-//   // };
 //   const hourly: HourlyData = {};
 
 //   payments.forEach((payment: any) => {
@@ -172,34 +169,16 @@ const calculateRunningTotal = (payments: any): ChargesResponse => {
 //       metadata: { donationMethod },
 //     } = payment;
 
-//     // Update the running totals based on the donation type and Stripe filter
-//     // if (donationMethod?.startsWith("Stripe")) {
-//     //   if (description.match(/Merchandise/i)) {
-//     //     totals.stripeMerch += amount_captured / 100;
-//     //   } else if (description.match(/Donations/i)) {
-//     //     totals.stripeDonation += amount_captured / 100;
-//     //   }
-//     // } else if (description.match(/GiveTap/i)) {
-//     //   totals.stripeMerch += amount_captured / 100;
-//     // } else if (description.match(/donation/i)) {
-//     //   totals.generalDonation += amount_captured / 100;
-//     // } else if (description.match(/Subscription creation/i)) {
-//     //   totals.generalDonation += amount_captured / 100;
-//     // }
+//     const amount = amount_captured / 100;
 
-//     // // Calculate the running total
-//     // totals.runningTotal += amount_captured / 100;
-
-//     // Calculate the hourly totals and group totals
 //     const createdDate = new Date(created * 1000);
-
 //     const hour = createdDate.toLocaleString("en-GB", {
 //       timeZone: "Europe/London",
 //       hour: "2-digit",
 //       hour12: false,
 //     });
 
-//     if (!hourly[hour as string]) {
+//     if (!hourly[hour]) {
 //       hourly[hour] = {
 //         stripeMerch: 0,
 //         stripeDonation: 0,
@@ -210,26 +189,26 @@ const calculateRunningTotal = (payments: any): ChargesResponse => {
 
 //     if (donationMethod?.startsWith("Stripe")) {
 //       if (description.match(/Merchandise/i)) {
-//         hourly[hour].stripeMerch += amount_captured / 100;
+//         hourly[hour].stripeMerch += amount;
 //       } else if (description.match(/Donations/i)) {
-//         hourly[hour].stripeDonation += amount_captured / 100;
+//         hourly[hour].stripeDonation += amount;
 //       }
-//     } else if (description.match(/GiveTap/i)) {
-//       hourly[hour].stripeMerch += amount_captured / 100;
+//     } else if (
+//       description.match(/GiveTap/i) ||
+//       description.match(/Subscription creation/i)
+//     ) {
+//       hourly[hour].stripeMerch += amount;
 //     } else if (
 //       description.match(/donation/i) &&
 //       /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/.test(description)
 //     ) {
-//       hourly[hour].generalDonation += amount_captured / 100;
-//     } else if (description.match(/Subscription creation/i)) {
-//       hourly[hour].generalDonation += amount_captured / 100;
+//       hourly[hour].generalDonation += amount;
 //     }
 
-//     hourly[hour].runningTotal += amount_captured / 100;
+//     hourly[hour].runningTotal += amount;
 //   });
 
 //   return {
-//     // totals,
 //     hourly,
 //   };
 // };
