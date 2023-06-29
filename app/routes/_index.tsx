@@ -98,16 +98,16 @@ export default function Index() {
             <tbody>
               <tr className="border-b border-blue-600 bg-rsfBlue-400 text-white">
                 <td className="px-6 py-4 text-2xl">
-                  £{donations.totals.stripeMerch.toFixed(2)}
+                  £{donations.totals?.stripeMerch.toFixed(2)}
                 </td>
                 <td className="px-6 py-4 text-2xl">
-                  £{donations.totals.stripeDonation.toFixed(2)}
+                  £{donations.totals?.stripeDonation.toFixed(2)}
                 </td>
                 <td className="px-6 py-4 text-2xl">
-                  £{donations.totals.generalDonation.toFixed(2)}
+                  £{donations.totals?.generalDonation.toFixed(2)}
                 </td>
                 <td className="px-6 py-4 text-2xl">
-                  £{donations.totals.runningTotal.toFixed(2)}
+                  £{donations.totals?.runningTotal.toFixed(2)}
                 </td>
               </tr>
             </tbody>
