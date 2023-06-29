@@ -73,11 +73,11 @@ export default function Index() {
             {`Totaliser running for today between 3pm - Midnight, please refresh page for latest totals, last update ${lastRequested}.`}
           </p>
         </div>
-        {/* <h2 className="text-bold py-2 text-center text-lg uppercase text-white">
+        <h2 className="text-bold py-2 text-center text-lg uppercase text-white">
           Daily Total
-        </h2> */}
+        </h2>
         <div className="rounded-full pt-2">
-          {/* <table className="w-full text-left text-sm text-gray-500 dark:text-gray-400">
+          <table className="w-full text-left text-sm text-gray-500 dark:text-gray-400">
             <thead className="bg-sky-300 text-xs uppercase text-rsfBlue-400">
               <tr>
                 <th scope="col" className="px-6 py-3">
@@ -112,7 +112,7 @@ export default function Index() {
                 </tr>
               )}
             </tbody>
-          </table> */}
+          </table>
           <h2 className="text-bold py-2 text-center text-lg uppercase text-white">
             Hourly breakdown
           </h2>

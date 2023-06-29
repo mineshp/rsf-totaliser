@@ -8,7 +8,7 @@ const stripe = new Stripe(process.env.STRIPE_API_KEY || "xyz", {
 function getStartAndEndTimestamp(period: string | null) {
   let today = new Date();
 
-  today.setHours(15);
+  today.setHours(5);
   today.setMinutes(0);
   today.setSeconds(0);
 
@@ -20,7 +20,7 @@ function getStartAndEndTimestamp(period: string | null) {
 
     yesterday.setDate(yesterday.getDate() - 1);
 
-    yesterday.setHours(13);
+    yesterday.setHours(5);
     yesterday.setSeconds(0);
     yesterday.setMinutes(0);
 
@@ -28,7 +28,8 @@ function getStartAndEndTimestamp(period: string | null) {
       yesterday.getFullYear(),
       yesterday.getMonth(),
       yesterday.getDate(),
-      23,
+      // 23,
+      13,
       59,
       59
     );
@@ -94,17 +95,17 @@ export async function getAllPayments(
     }
     return true;
   });
-  console.log(filteredPayments.length);
+
   return calculateRunningTotal(filteredPayments);
 }
 
 const calculateRunningTotal = (payments: any): ChargesResponse => {
-  // const totals = {
-  //   stripeMerch: 0,
-  //   stripeDonation: 0,
-  //   generalDonation: 0,
-  //   runningTotal: 0,
-  // };
+  const totals = {
+    stripeMerch: 0,
+    stripeDonation: 0,
+    generalDonation: 0,
+    runningTotal: 0,
+  };
   const hourly: HourlyData = {};
 
   for (let i = 0; i < payments.length; i++) {
@@ -133,27 +134,30 @@ const calculateRunningTotal = (payments: any): ChargesResponse => {
     }
 
     if (donationMethod?.startsWith("Stripe")) {
-      if (description.match(/Merchandise|Donations/i)) {
-        // totals.stripeMerch += amount;
+      if (description.match(/Merchandise/i)) {
+        totals.stripeMerch += amount;
         hourly[hour].stripeMerch += amount;
+      } else if (description.match(/Donations/i)) {
+        totals.stripeDonation += amount;
+        hourly[hour].stripeDonation += amount;
       }
-    } else if (description.match(/GiveTap|Subscription creation/i)) {
-      // totals.stripeMerch += amount;
+    } else if (description.match(/GiveTap/i)) {
+      totals.stripeMerch += amount;
       hourly[hour].stripeMerch += amount;
-    } else if (
-      description.match(/donation/i) &&
-      /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/.test(description)
-    ) {
-      // totals.generalDonation += amount;
+    } else if (description.match(/Subscription creation/i)) {
+      totals.generalDonation += amount;
+      hourly[hour].generalDonation += amount;
+    } else if (description.match(/donation/i)) {
+      totals.generalDonation += amount;
       hourly[hour].generalDonation += amount;
     }
 
-    // totals.runningTotal += amount;
+    totals.runningTotal += amount;
     hourly[hour].runningTotal += amount;
   }
 
   return {
-    // totals,
+    totals,
     hourly,
   };
 };
