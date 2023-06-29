@@ -7,12 +7,12 @@ export interface PaymentResponse {
 }
 
 export interface ChargesResponse {
-  totals: {
-    stripeMerch: number;
-    stripeDonation: number;
-    generalDonation: number;
-    runningTotal: number;
-  };
+  // totals: {
+  //   stripeMerch: number;
+  //   stripeDonation: number;
+  //   generalDonation: number;
+  //   runningTotal: number;
+  // };
   hourly: {
     [key: string]: {
       stripeMerch: number;
