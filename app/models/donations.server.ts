@@ -29,7 +29,7 @@ function getStartAndEndTimestamp(period: string | null) {
       yesterday.getMonth(),
       yesterday.getDate(),
       // 23,
-      13,
+      23,
       59,
       59
     );
